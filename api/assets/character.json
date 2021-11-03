@@ -1,0 +1,12 @@
+[
+  {
+    "name": "吸血鬼",
+    "english": "vampire",
+    "img": "vampire.png"
+  },
+  {
+    "name": "ワーウルフ",
+    "english": "werewolf",
+    "img": "werewolf.png"
+  }
+]

@@ -13,4 +13,10 @@ type TeamsCharacter struct {
 	TeamId      uint       `json:"-"`
 	CharacterId uint       `json:"-"`
 	Character   Characters `json:"character" gorm:"-"`
+	Attack      int        `json:"attack"`
+	Defence     int        `json:"defence"`
+	Avoidance   int        `json:"critical_rate"`
+	Hit         int        `json:"agility"`
+	Hp          int        `json:"hp"`
+	Mp          int        `json:"mp"`
 }

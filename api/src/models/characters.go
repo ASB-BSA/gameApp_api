@@ -4,6 +4,7 @@ import "gorm.io/gorm"
 
 type Characters struct {
 	gorm.Model
-	Name string `json:"name"`
-	Img  string `json:"img"`
+	Name    string `json:"name"`
+	English string `json:"english"`
+	Img     string `json:"img"`
 }
