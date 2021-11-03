@@ -23,6 +23,13 @@ func PostUser(c *fiber.Ctx) error {
 		})
 	}
 
+	if p.Name == "" {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "名前を入力してください",
+		})
+	}
+
 	user := models.Users{
 		Name: p.Name,
 	}
