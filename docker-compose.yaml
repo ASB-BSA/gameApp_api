@@ -22,7 +22,7 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: root
+      MYSQL_DATABASE: game
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: game
       MYSQL_PASSWORD: game

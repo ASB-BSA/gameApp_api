@@ -1,1 +1,4 @@
 .dbdata
+.env
+api/gameapp_firebase_adk.json
+api/tmp
