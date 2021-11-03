@@ -1,0 +1,38 @@
+version: '3'
+services:
+  api:
+    build: ./api
+    tty: true
+    ports:
+      - 1129:1129
+    volumes:
+      - ./api:/usr/src/app
+    depends_on:
+      - db
+    
+  websocket:
+    build: ./websocket
+    ports:
+      - 8000:8000
+    tty: true
+    volumes:
+      - ./websocket:/usr/src/app
+
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: game
+      MYSQL_PASSWORD: game
+      TZ: "Asia/Tokyo"
+    volumes:
+      - .dbdata:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
