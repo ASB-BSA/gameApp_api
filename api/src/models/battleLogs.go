@@ -4,5 +4,8 @@ import "gorm.io/gorm"
 
 type BattleLogs struct {
 	gorm.Model
-	Log string `json:"log"`
+	BattleID          uint   `json:"-"`
+	BattleCharacterID uint   `json:"-"`
+	Parameter         string `json:"parameter"`
+	NumericalValue    int    `json:"numerical_value"`
 }

@@ -34,5 +34,15 @@ func Connect() {
 }
 
 func AutoMigrate() {
-	DB.AutoMigrate(models.Users{}, models.BattleLogs{}, models.Characters{}, models.Teams{}, models.TeamsCharacter{})
+	DB.AutoMigrate(
+		models.Users{},
+		models.Battle{},
+		models.BattleLogs{},
+		models.BattleTeams{},
+		models.BattleCharacter{},
+		models.Teams{},
+		models.TeamsCharacter{},
+		models.Rooms{},
+		models.Characters{},
+	)
 }

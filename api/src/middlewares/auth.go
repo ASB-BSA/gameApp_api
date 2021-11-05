@@ -24,7 +24,7 @@ func IsAuthenticated(c *fiber.Ctx) error {
 	if err != nil || !token.Valid {
 		c.Status(fiber.StatusUnauthorized)
 		return c.JSON(fiber.Map{
-			"message": "unauthenticated",
+			"message": "ユーザー情報の認証に失敗しました。",
 		})
 	}
 

@@ -17,4 +17,9 @@ func Setup(app *fiber.App) {
 	authen := v1.Use(middlewares.IsAuthenticated)
 	authen.Get("user", controllers.GetUser)
 	authen.Get("character", controllers.GetCharacter)
+	authen.Get("room", controllers.GetRoom)
+	authen.Post("room", controllers.PostRoom)
+
+	battle := authen.Use(middlewares.IsBattle)
+	battle.Get("battle", controllers.GetBattle)
 }

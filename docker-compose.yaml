@@ -26,21 +26,13 @@ services:
       - ./api:/usr/src/app
     depends_on:
       - db
-    
-  websocket:
-    build: ./websocket
-    ports:
-      - 8000:8000
-    tty: true
-    volumes:
-      - ./websocket:/usr/src/app
 
   db:
     image: mysql:latest
     restart: always
     environment:
       MYSQL_DATABASE: game
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: game
       MYSQL_USER: game
       MYSQL_PASSWORD: game
       TZ: "Asia/Tokyo"

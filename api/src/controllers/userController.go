@@ -10,7 +10,7 @@ import (
 )
 
 type UserPost struct {
-	Name string `name:"name"`
+	Name string `json:"name"`
 }
 
 func PostUser(c *fiber.Ctx) error {

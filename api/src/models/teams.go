@@ -4,19 +4,27 @@ import "gorm.io/gorm"
 
 type Teams struct {
 	gorm.Model
-	UserId uint             `gorm:""`
-	Teams  []TeamsCharacter `json:"teams" gorm:"foreignkey:TeamId"`
+	UsersId uint             `gorm:""`
+	Teams   []TeamsCharacter `json:"teams" gorm:"foreignkey:TeamsID"`
 }
 
 type TeamsCharacter struct {
 	gorm.Model
-	TeamId      uint       `json:"-"`
+	TeamsID     uint       `json:"-"`
 	CharacterId uint       `json:"-"`
 	Character   Characters `json:"character" gorm:"-"`
-	Attack      int        `json:"attack"`
-	Defence     int        `json:"defence"`
-	Avoidance   int        `json:"critical_rate"`
-	Hit         int        `json:"agility"`
-	Hp          int        `json:"hp"`
-	Mp          int        `json:"mp"`
+	Parameter
+}
+
+type BattleTeams struct {
+	gorm.Model
+	Teams []BattleCharacter `json:"teams" gorm:"foreignkey:BattleTeamsID"`
+}
+
+type BattleCharacter struct {
+	gorm.Model
+	BattleTeamsID uint       `json:"-"`
+	CharacterId   uint       `json:"-"`
+	Character     Characters `json:"character" gorm:"-"`
+	Parameter
 }
