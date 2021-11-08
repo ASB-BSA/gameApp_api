@@ -8,16 +8,15 @@ const Layout = () => {
   return (
     <UI.Flex>
       <UI.Box
-        w={64}
         h="100vh"
-        p={8}
+        py={16}
+        px={4}
         bg="gray.700"
       >
-        <UI.Stack spacing={4}>
+        <UI.Stack spacing={8}>
           {RouterConfig.map(e => {
             return (
             <>{e.path !== "/login" && e.children?.map(el => {
-              console.log(el)
               return (
                 <>{el.children?.map(elm => (
                   <>{elm.icon && 
@@ -26,6 +25,7 @@ const Layout = () => {
                     >
                       <UI.Flex
                         alignItems="center"
+                        justifyContent="center"
                       >
                         <UI.Box
                           mr={3}
@@ -34,10 +34,6 @@ const Layout = () => {
                         >
                           {elm.icon}
                         </UI.Box>
-                        <UI.Text
-                          fontSize="13px"
-                          color="white"
-                        >{elm.name}</UI.Text>
                       </UI.Flex>
                     </NavLink>
                     }

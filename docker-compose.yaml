@@ -16,6 +16,8 @@ services:
       DOMAINS: 'api.localhost -> http://api:1129'
       # STAGE: 'production'
       STAGE: 'local'
+    extra_hosts:
+      - "localhost:192.168.0.13"
 
   api:
     build: ./api
@@ -45,3 +47,15 @@ services:
     image: redis:latest
     ports:
       - 6379:6379
+
+  node:
+    build: ./admin
+    ports:
+      - 3000:3000
+    volumes:
+      - ./admin:/usr/src/app
+    tty: true
+    extra_hosts:
+      - "localhost:192.168.0.13"
+    depends_on:
+      - api
