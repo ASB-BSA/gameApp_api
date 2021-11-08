@@ -44,5 +44,6 @@ func AutoMigrate() {
 		models.TeamsCharacter{},
 		models.Rooms{},
 		models.Characters{},
+		models.Characteristic{},
 	)
 }
