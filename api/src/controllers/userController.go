@@ -51,6 +51,8 @@ func PostUser(c *fiber.Ctx) error {
 		Name:     "jwt",
 		Value:    token,
 		Expires:  time.Now().AddDate(10, 0, 0),
+		SameSite: "None",
+		Secure:   true,
 		HTTPOnly: true,
 	}
 

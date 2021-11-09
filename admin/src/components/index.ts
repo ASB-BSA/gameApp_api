@@ -1,3 +1,6 @@
 export { default as Login } from './Login'
 export { default as Dashboard } from './Dashboard'
 export { default as Characteristic } from './Characteristic'
+export { default as Administrator } from './Administrator'
+export { default as Setting } from './Setting'
+export { default as SettingsDetail } from './SettingsDetail'

@@ -21,7 +21,10 @@ const Characteristic = () => {
         size="md"
       >特技管理</UI.Heading>
       <form onSubmit={onSubmit}>
-        <UI.Table variant="striped" colorScheme="gray">
+        <UI.Table
+          variant="striped"
+          mt={4}
+        >
           <UI.Thead>
             <UI.Tr>
               <UI.Th>技名</UI.Th>

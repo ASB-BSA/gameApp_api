@@ -17,7 +17,7 @@ services:
       # STAGE: 'production'
       STAGE: 'local'
     extra_hosts:
-      - "localhost:192.168.0.13"
+      - "localhost:192.168.1.188"
 
   api:
     build: ./api
@@ -48,14 +48,14 @@ services:
     ports:
       - 6379:6379
 
-  node:
-    build: ./admin
-    ports:
-      - 3000:3000
-    volumes:
-      - ./admin:/usr/src/app
-    tty: true
-    extra_hosts:
-      - "localhost:192.168.0.13"
-    depends_on:
-      - api
+  # node:
+  #   build: ./admin
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - ./admin:/usr/src/app
+  #   tty: true
+  #   extra_hosts:
+  #     - "localhost:192.168.0.13"
+  #   depends_on:
+  #     - api

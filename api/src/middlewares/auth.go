@@ -1,20 +1,27 @@
 package middlewares
 
 import (
+	"fmt"
+	"os"
 	"strconv"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 )
-
-const SecretKey = "secret"
 
 type ClaimsWithScope struct {
 	jwt.StandardClaims
 }
 
 func IsAuthenticated(c *fiber.Ctx) error {
+	err := godotenv.Load(fmt.Sprintf("./%s.env", os.Getenv("GO_ENV")))
+	if err != nil {
+		panic("Error getting .env data!")
+	}
+	SecretKey := os.Getenv("DB")
+
 	cookie := c.Cookies("jwt")
 
 	token, err := jwt.ParseWithClaims(cookie, &ClaimsWithScope{}, func(token *jwt.Token) (interface{}, error) {
@@ -32,6 +39,12 @@ func IsAuthenticated(c *fiber.Ctx) error {
 }
 
 func GenerateJWT(id uint) (string, error) {
+	err := godotenv.Load(fmt.Sprintf("./%s.env", os.Getenv("GO_ENV")))
+	if err != nil {
+		panic("Error getting .env data!")
+	}
+	SecretKey := os.Getenv("DB")
+
 	payload := ClaimsWithScope{}
 
 	payload.Subject = strconv.Itoa(int(id))
@@ -40,6 +53,12 @@ func GenerateJWT(id uint) (string, error) {
 }
 
 func GetUserId(c *fiber.Ctx) (uint, error) {
+	err := godotenv.Load(fmt.Sprintf("./%s.env", os.Getenv("GO_ENV")))
+	if err != nil {
+		panic("Error getting .env data!")
+	}
+	SecretKey := os.Getenv("DB")
+
 	cookie := c.Cookies("jwt")
 
 	token, err := jwt.ParseWithClaims(cookie, &ClaimsWithScope{}, func(token *jwt.Token) (interface{}, error) {

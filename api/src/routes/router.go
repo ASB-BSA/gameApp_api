@@ -14,6 +14,21 @@ func Setup(app *fiber.App) {
 
 	v1.Post("user", controllers.PostUser)
 
+	admin := v1.Group("admin")
+	admin.Post("login", controllers.AdminLogin)
+
+	isadmin := admin.Use(middlewares.IsAdmin)
+	isadmin.Get("admins", controllers.Admins)
+	isadmin.Post("register", controllers.AdminRegister)
+	isadmin.Post("settings", controllers.CreateSettingGroup)
+	isadmin.Get("settings", controllers.GetSettingGroup)
+	isadmin.Put("settings", controllers.PutSettingGroup)
+	isadmin.Delete("settings", controllers.DeleteSettingGroup)
+	isadmin.Post("settings/:category", controllers.CreateSettingItem)
+	isadmin.Get("settings/:category", controllers.GetSettingItem)
+	isadmin.Put("settings/:category", controllers.PutSettingItem)
+	isadmin.Delete("settings/:category", controllers.DeleteSettingItem)
+
 	authen := v1.Use(middlewares.IsAuthenticated)
 	authen.Get("user", controllers.GetUser)
 	authen.Get("character", controllers.GetCharacter)

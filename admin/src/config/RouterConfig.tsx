@@ -1,4 +1,4 @@
-import { Characteristic, Dashboard, Login } from "../components"
+import { Administrator, Characteristic, Dashboard, Login, Setting, SettingsDetail } from "../components"
 import { Layout } from "../components/template"
 import * as Icon from "react-icons/ri";
 import AuthProvider from "../utils/AuthProvider"
@@ -39,12 +39,34 @@ const RouterConfig: RouterType[] = [
             "children": null
           },
           {
+            "name": "ゲーム設定",
+            "path": "/setting",
+            "component": <Setting />,
+            "icon": <Icon.RiListSettingsFill />,
+            "children": null
+          },
+          {
+            "name": "ゲーム設定 - 詳細",
+            "path": "/setting/:id",
+            "component": <SettingsDetail />,
+            "icon": null,
+            "children": null
+          },
+          {
             "name": "特技管理",
             "path": "/characteristic",
             "component": <Characteristic />,
             "icon": <Icon.RiFireFill />,
             "children": null
-          }
+          },
+          
+          {
+            "name": "管理者",
+            "path": "/administrator",
+            "component": <Administrator />,
+            "icon": <Icon.RiAdminFill />,
+            "children": null
+          },
         ]
       },
     ]

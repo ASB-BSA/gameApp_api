@@ -35,6 +35,9 @@ func Connect() {
 
 func AutoMigrate() {
 	DB.AutoMigrate(
+		models.Admin{},
+		models.SettingGroup{},
+		models.Setting{},
 		models.Users{},
 		models.Battle{},
 		models.BattleLogs{},

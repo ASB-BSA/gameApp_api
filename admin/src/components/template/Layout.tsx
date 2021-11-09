@@ -20,22 +20,27 @@ const Layout = () => {
               return (
                 <>{el.children?.map(elm => (
                   <>{elm.icon && 
-                    <NavLink
-                      to={`${elm.path}`}
+                    <UI.Tooltip
+                      label={elm.name}
+                      placement="right"
                     >
-                      <UI.Flex
-                        alignItems="center"
-                        justifyContent="center"
+                      <NavLink
+                        to={`${elm.path}`}
                       >
-                        <UI.Box
-                          mr={3}
-                          fontSize="22px"
-                          color="white"
+                        <UI.Flex
+                          alignItems="center"
+                          justifyContent="center"
                         >
-                          {elm.icon}
-                        </UI.Box>
-                      </UI.Flex>
-                    </NavLink>
+                          <UI.Box
+                            mr={3}
+                            fontSize="22px"
+                            color="white"
+                          >
+                            {elm.icon}
+                          </UI.Box>
+                        </UI.Flex>
+                      </NavLink>
+                    </UI.Tooltip>
                     }
                   </>))
                 }</>

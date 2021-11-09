@@ -11,44 +11,43 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type ClaimsWithBattle struct {
+type AdminClaimsWithScope struct {
 	jwt.StandardClaims
 }
 
-func IsBattle(c *fiber.Ctx) error {
+func IsAdmin(c *fiber.Ctx) error {
 	err := godotenv.Load(fmt.Sprintf("./%s.env", os.Getenv("GO_ENV")))
 	if err != nil {
 		panic("Error getting .env data!")
 	}
-	SecretKey := os.Getenv("GAME_SECKEY")
+	SecretKey := os.Getenv("ADMIN_SECKEY")
 
-	cookie := c.Cookies("battle")
+	cookie := c.Cookies("admin-jwt")
 
-	token, err := jwt.ParseWithClaims(cookie, &ClaimsWithBattle{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(cookie, &ClaimsWithScope{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(SecretKey), nil
 	})
 
 	if err != nil || !token.Valid {
 		c.Status(fiber.StatusUnauthorized)
 		return c.JSON(fiber.Map{
-			"message": "対戦情報がありません",
+			"message": "unauthenticated",
 		})
 	}
 
 	return c.Next()
 }
 
-func GenerateBattleToken(id uint) (string, error) {
+func GenerateAdminJWT(id uint) (string, error) {
 	err := godotenv.Load(fmt.Sprintf("./%s.env", os.Getenv("GO_ENV")))
 	if err != nil {
 		panic("Error getting .env data!")
 	}
-	SecretKey := os.Getenv("GAME_SECKEY")
+	SecretKey := os.Getenv("ADMIN_SECKEY")
 
-	payload := ClaimsWithBattle{}
+	payload := ClaimsWithScope{}
 
 	payload.Subject = strconv.Itoa(int(id))
 	payload.ExpiresAt = time.Now().AddDate(10, 0, 0).Unix()
-
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, payload).SignedString([]byte(SecretKey))
 }
