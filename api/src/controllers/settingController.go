@@ -3,6 +3,7 @@ package controllers
 import (
 	"boomin_game_api/src/database"
 	"boomin_game_api/src/models"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -50,7 +51,36 @@ func DeleteSettingGroup(c *fiber.Ctx) error {
 }
 
 func CreateSettingItem(c *fiber.Ctx) error {
-	return c.JSON("Hello")
+	var data map[string]string
+
+	if err := c.BodyParser(&data); err != nil {
+		c.Status(400)
+		return err
+	}
+
+	if data["setting_name"] == "" || data["setting_label"] == "" || data["setting_value"] == "" {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "You're missing a value.",
+		})
+	}
+
+	id, _ := strconv.Atoi(c.Params("id"))
+
+	// setting := models.Setting{
+	// 	SettingGroupID: uint(id),
+	// 	SettingName:    data["setting_name"],
+	// 	SettingLabel:   data["setting_label"],
+	// 	SettingValue:   data["setting_value"],
+	// 	SettingType:    data["setting_type"],
+	// }
+
+	// if result := database.DB.Create(&setting); result.Error != nil {
+	// 	return result.Error
+	// }
+
+	// return c.JSON(&setting)
+	return c.JSON(id)
 }
 
 func GetSettingItem(c *fiber.Ctx) error {

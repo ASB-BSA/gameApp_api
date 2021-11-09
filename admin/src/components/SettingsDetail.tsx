@@ -39,6 +39,11 @@ const SettingsDetail = () => {
   const onSubmit = handleSubmit(data => {
     data.group_id = item?.ID
     console.log(data)
+    axios.post(`settings/${item?.ID}`, data)
+      .then(console.log)
+      .catch(e => {
+        console.log(e.response)
+      })
   })
 
   return (
@@ -56,8 +61,8 @@ const SettingsDetail = () => {
             <UI.Tr>
               <UI.Th>設定名</UI.Th>
               <UI.Th>ラベル(英語)</UI.Th>
-              <UI.Th>値</UI.Th>
               <UI.Th>型</UI.Th>
+              <UI.Th>値</UI.Th>
               <UI.Th>操作</UI.Th>
             </UI.Tr>
           </UI.Thead>
@@ -94,7 +99,6 @@ const SettingsDetail = () => {
             <UI.Tr>
               <UI.Td><UI.Input type="text" {...register("setting_name")} /></UI.Td>
               <UI.Td><UI.Input type="text" {...register("setting_label")} /></UI.Td>
-              <UI.Td><UI.Input type="text" {...register("setting_value")} /></UI.Td>
               <UI.Td>
                 <UI.Select {...register("setting_type")} >
                   <option value="string">String</option>
@@ -102,6 +106,7 @@ const SettingsDetail = () => {
                   <option value="boolean">Boolean</option>
                 </UI.Select>
               </UI.Td>
+              <UI.Td><UI.Input type="text" {...register("setting_value")} /></UI.Td>
               <UI.Td>
                 <UI.Button type="submit">追加</UI.Button>
               </UI.Td>
