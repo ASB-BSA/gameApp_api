@@ -12,12 +12,12 @@ services:
       - ./org-chimata-ssl-certs:/var/lib/https-portal
     environment:
       CLIENT_MAX_BODY_SIZE: 1024M
-      # DOMAINS: 'api.game-boomin.net -> http://api:1129'
-      DOMAINS: 'api.localhost -> http://api:1129'
+      # DOMAINS: 'api.game-boomin.net -> http://api:1129, admin.game-boomin.net -> http://admin:8001'
+      DOMAINS: 'api.localhost -> http://api:1129, admin.localhost -> http://admin:8001'
       # STAGE: 'production'
       STAGE: 'local'
-    extra_hosts:
-      - "localhost:192.168.1.188"
+    # extra_hosts:
+    #   - "localhost:192.168.1.188"
 
   api:
     build: ./api
@@ -28,6 +28,15 @@ services:
       - ./api:/usr/src/app
     depends_on:
       - db
+
+  admin:
+    build: ./nginx/admin
+    ports:
+      - 8001:8001
+    volumes:
+      - ./html/admin:/var/www/html
+      - ./log/admin:/var/log/nginx
+      - ./nginx/admin/sites:/etc/nginx/conf.d
 
   db:
     image: mysql:latest

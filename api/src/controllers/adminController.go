@@ -80,6 +80,8 @@ func AdminLogin(c *fiber.Ctx) error {
 		Name:     "admin-jwt",
 		Value:    token,
 		Expires:  time.Now().AddDate(10, 0, 0),
+		SameSite: "None",
+		Secure:   true,
 		HTTPOnly: true,
 	}
 

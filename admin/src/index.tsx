@@ -8,7 +8,7 @@ import axios from 'axios';
 import { BrowserRouter } from 'react-router-dom';
 import theme from './config/ChakraConfig';
 
-axios.defaults.baseURL = 'http://localhost:1129/api/v1/admin/'
+axios.defaults.baseURL = 'https://api.localhost/api/v1/admin/'
 axios.defaults.withCredentials = true
 
 ReactDOM.render(
