@@ -37,7 +37,7 @@ func AutoMigrate() {
 	DB.AutoMigrate(
 		models.Admin{},
 		models.SettingGroup{},
-		models.Setting{},
+		models.SettingGroupItem{},
 		models.Users{},
 		models.Battle{},
 		models.BattleLogs{},

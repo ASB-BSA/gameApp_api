@@ -1,18 +1,55 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as UI from "@chakra-ui/react"
 import * as Icon from "react-icons/ri"
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import CharacteristicState, { CharacteristicStateType } from '../atoms/CharacteristicState';
 import { useForm } from 'react-hook-form';
 import ConvertToText from '../utils/Characteristic';
+import IsRedirect from '../atoms/IsRedirect';
+import axios from 'axios';
 
 const Characteristic = () => {
   const [characteristics, setCharacteristics] = useRecoilState(CharacteristicState);
+  const setRedirect = useSetRecoilState(IsRedirect)
 
-  const { register, setValue, handleSubmit } = useForm<CharacteristicStateType>();
+  useEffect(() => {
+    axios.get('characteristic')
+      .then(e => setCharacteristics(e.data))
+      .catch(() => {
+        setRedirect(true)
+      })
+  }, [])
+
+  const { register, setValue, handleSubmit, reset } = useForm<CharacteristicStateType>({
+    defaultValues: {
+      name: "",
+      conditions_parameter: 'hp',
+      conditions_value: 0,
+      conditions_expression: '>',
+      to_whom: 'myself',
+      parameter: 'attack',
+      happen: '+',
+      how_much: 0,
+    }
+  });
 
   const onSubmit = handleSubmit(data => {
+    data.conditions_value = String(data.conditions_value)
+    data.how_much = String(data.how_much)
+    
     setCharacteristics([...characteristics, data])
+    axios.post(`characteristic`, data)
+      .then(() => {
+        reset()
+        axios.get('characteristic')
+          .then(e => setCharacteristics(e.data))
+          .catch(() => {
+            setRedirect(true)
+          })
+      })
+      .catch(e => {
+        console.log(e.response)
+      })
   })
 
   return (

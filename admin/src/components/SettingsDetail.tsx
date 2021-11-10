@@ -7,14 +7,24 @@ import SettingState, { SettingGroup, SettingType } from '../atoms/SettingsState'
 import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import * as Icon from "react-icons/ri"
+import SettingItemEdit from './Settings/SettingItemEdit'
 
 const SettingsDetail = () => {
   let { id } = useParams();
   const [settings, setSettings] = useRecoilState(SettingState)
   const setRedirect = useSetRecoilState(IsRedirect)
 
-  const { register, setValue, handleSubmit } = useForm<SettingType>();
-
+  const { isOpen, onOpen, onClose } = UI.useDisclosure()
+  const { register, handleSubmit, reset } = useForm<SettingType>({
+    defaultValues: {
+      "group_id": 0,
+      "setting_label": "",
+      "setting_name": "",
+      "setting_type": "string",
+      "setting_value": "",
+    }
+  });
+  
   const [item, setItem] = useState<SettingGroup|undefined>({
     ID: 0,
     group_name: "",
@@ -23,7 +33,7 @@ const SettingsDetail = () => {
   })
 
   useEffect(() => {
-    if (settings) {
+    if (settings.length > 0) {
       setItem(settings.find(f => f.group_category === id))
     }
   }, [settings])
@@ -37,13 +47,28 @@ const SettingsDetail = () => {
   }, [])
   
   const onSubmit = handleSubmit(data => {
-    data.group_id = item?.ID
-    console.log(data)
-    axios.post(`settings/${item?.ID}`, data)
-      .then(console.log)
+    data.group_id = String(item?.ID)
+    axios.post(`settings/${data.group_id}`, data)
+      .then(() => {
+        reset()
+        axios.get('settings')
+          .then(e => setSettings(e.data))
+          .catch(() => {
+            setRedirect(true)
+          })
+      })
       .catch(e => {
         console.log(e.response)
       })
+  })
+
+  const [edit, setEdit] = useState<SettingType>({
+    "ID": 0,
+    "group_id": 0,
+    "setting_label": "",
+    "setting_name": "",
+    "setting_type": "string",
+    "setting_value": "",
   })
 
   return (
@@ -60,7 +85,7 @@ const SettingsDetail = () => {
           <UI.Thead>
             <UI.Tr>
               <UI.Th>設定名</UI.Th>
-              <UI.Th>ラベル(英語)</UI.Th>
+              <UI.Th>カラム名(英語)</UI.Th>
               <UI.Th>型</UI.Th>
               <UI.Th>値</UI.Th>
               <UI.Th>操作</UI.Th>
@@ -83,6 +108,10 @@ const SettingsDetail = () => {
                         <UI.IconButton
                           colorScheme="blue"
                           aria-label="Edit"
+                          onClick={() => {
+                            setEdit(e)
+                            onOpen()
+                          }}
                           icon={<Icon.RiEdit2Fill />}
                         />
                         <UI.IconButton
@@ -95,7 +124,7 @@ const SettingsDetail = () => {
                   </UI.Tr>
                 )
               })
-            : ''}
+            : <UI.Tr><UI.Td colSpan={5}>なにもありません</UI.Td></UI.Tr>}
             <UI.Tr>
               <UI.Td><UI.Input type="text" {...register("setting_name")} /></UI.Td>
               <UI.Td><UI.Input type="text" {...register("setting_label")} /></UI.Td>
@@ -114,6 +143,15 @@ const SettingsDetail = () => {
           </UI.Tbody>
         </UI.Table>
       </form>
+      
+      <UI.Modal isOpen={isOpen} onClose={onClose}>
+        <UI.ModalOverlay />
+        <UI.ModalContent>
+          <UI.ModalHeader>UI.Modal Title</UI.ModalHeader>
+          <SettingItemEdit setting={edit} onClose={onClose} />
+          <UI.ModalCloseButton />
+        </UI.ModalContent>
+      </UI.Modal>
     </>
   )
 }

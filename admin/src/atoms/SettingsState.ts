@@ -8,7 +8,8 @@ export type SettingGroup = {
 }
 
 export type SettingType = {
-  group_id: number|undefined
+  ID: number
+  group_id: string|number|undefined
   setting_name: string
   setting_label: string
   setting_value: string

@@ -4,14 +4,14 @@ import "gorm.io/gorm"
 
 type SettingGroup struct {
 	gorm.Model
-	Settings      []Setting `json:"settings"`
-	GroupName     string    `json:"group_name"`
-	GroupCategory string    `json:"group_category"`
+	GroupName     string             `json:"group_name"`
+	GroupCategory string             `json:"group_category"`
+	Settings      []SettingGroupItem `json:"settings" gorm:"foreignKey:SettingGroupID"`
 }
 
-type Setting struct {
+type SettingGroupItem struct {
 	gorm.Model
-	SettingGroupID uint   `json:"group_id"`
+	SettingGroupID uint   `json:"-"`
 	SettingName    string `json:"setting_name"`
 	SettingLabel   string `json:"setting_label"`
 	SettingValue   string `json:"setting_value"`

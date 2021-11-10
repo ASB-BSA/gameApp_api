@@ -64,6 +64,7 @@ const HappenFunc = (e: CharacteristicStateType['happen']) => {
 }
 
 const ConvertToText = (data:CharacteristicStateType):string => {
+    console.log(data)
     const param = paramFunc(data.conditions_parameter)
     const value = String(data.conditions_value)
     const expression = expressionFunc(data.conditions_expression)

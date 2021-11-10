@@ -37,7 +37,7 @@ func CreateSettingGroup(c *fiber.Ctx) error {
 func GetSettingGroup(c *fiber.Ctx) error {
 	var settings []models.SettingGroup
 
-	database.DB.Find(&settings)
+	database.DB.Preload("Settings").Find(&settings)
 
 	return c.JSON(settings)
 }
@@ -67,28 +67,50 @@ func CreateSettingItem(c *fiber.Ctx) error {
 
 	id, _ := strconv.Atoi(c.Params("id"))
 
-	// setting := models.Setting{
-	// 	SettingGroupID: uint(id),
-	// 	SettingName:    data["setting_name"],
-	// 	SettingLabel:   data["setting_label"],
-	// 	SettingValue:   data["setting_value"],
-	// 	SettingType:    data["setting_type"],
-	// }
+	var res models.SettingGroupItem
+	if result := database.DB.Where("setting_label = ?", data["setting_label"]).First(&res); result.Error == nil {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "Already registered.",
+		})
+	}
 
-	// if result := database.DB.Create(&setting); result.Error != nil {
-	// 	return result.Error
-	// }
+	setting := models.SettingGroupItem{
+		SettingGroupID: uint(id),
+		SettingName:    data["setting_name"],
+		SettingLabel:   data["setting_label"],
+		SettingValue:   data["setting_value"],
+		SettingType:    data["setting_type"],
+	}
 
-	// return c.JSON(&setting)
-	return c.JSON(id)
-}
+	if result := database.DB.Create(&setting); result.Error != nil {
+		return result.Error
+	}
 
-func GetSettingItem(c *fiber.Ctx) error {
-	return c.JSON("Hello")
+	return c.JSON(&setting)
 }
 
 func PutSettingItem(c *fiber.Ctx) error {
-	return c.JSON("Hello")
+	var data map[string]string
+
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
+	id, _ := strconv.Atoi(c.Params("id"))
+
+	setting := models.SettingGroupItem{
+		SettingName:  data["setting_name"],
+		SettingLabel: data["setting_label"],
+		SettingValue: data["setting_value"],
+		SettingType:  data["setting_type"],
+	}
+
+	setting.ID = uint(id)
+
+	database.DB.Model(&setting).Updates(&setting)
+
+	return c.JSON(setting)
 }
 
 func DeleteSettingItem(c *fiber.Ctx) error {
