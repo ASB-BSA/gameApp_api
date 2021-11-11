@@ -12,6 +12,7 @@ func Setup(app *fiber.App) {
 
 	v1 := api.Group("v1")
 
+	v1.Get("settings", controllers.ExportSetting)
 	v1.Post("user", controllers.PostUser)
 
 	admin := v1.Group("admin")

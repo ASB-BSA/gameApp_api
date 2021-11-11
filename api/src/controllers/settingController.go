@@ -3,6 +3,9 @@ package controllers
 import (
 	"boomin_game_api/src/database"
 	"boomin_game_api/src/models"
+	"boomin_game_api/src/utils"
+	"fmt"
+	"reflect"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -115,4 +118,45 @@ func PutSettingItem(c *fiber.Ctx) error {
 
 func DeleteSettingItem(c *fiber.Ctx) error {
 	return c.JSON("Hello")
+}
+
+func ExportSetting(c *fiber.Ctx) error {
+	var settings []models.SettingGroup
+	database.DB.Preload("Settings").Find(&settings)
+
+	b := utils.StructBuilder()
+
+	for _, v := range settings {
+		for _, e := range v.Settings {
+			fmt.Println(e)
+			switch e.SettingType {
+			case "string":
+				b.AddField(e.SettingLabel, reflect.TypeOf(""))
+			case "int":
+				b.AddField(e.SettingLabel, reflect.TypeOf(1))
+			case "boolean":
+				b.AddField(e.SettingLabel, reflect.TypeOf(true))
+			}
+		}
+	}
+
+	person := b.Build()
+	i := person.NewInstance()
+
+	for _, v := range settings {
+		for _, e := range v.Settings {
+			switch e.SettingType {
+			case "string":
+				i.SetString(e.SettingLabel, e.SettingValue)
+			case "int":
+				val, _ := strconv.Atoi(e.SettingValue)
+				i.SetInt(e.SettingLabel, val)
+			case "boolean":
+				val, _ := strconv.ParseBool(e.SettingValue)
+				i.SetBool(e.SettingLabel, val)
+			}
+		}
+	}
+
+	return c.JSON(i.Value())
 }
