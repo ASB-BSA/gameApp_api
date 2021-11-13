@@ -10,9 +10,8 @@ type Teams struct {
 
 type TeamsCharacter struct {
 	gorm.Model
-	TeamsID     uint       `json:"-"`
-	CharacterId uint       `json:"-"`
-	Character   Characters `json:"character" gorm:"-"`
+	TeamsID     uint `json:"teamId"`
+	CharacterId uint `json:"characterId"`
 	Parameter
 }
 

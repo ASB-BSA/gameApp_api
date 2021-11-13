@@ -8,7 +8,10 @@ import axios from 'axios';
 import { BrowserRouter } from 'react-router-dom';
 import theme from './config/ChakraConfig';
 
-axios.defaults.baseURL = 'https://api.localhost/api/v1/admin/'
+// https://api.localhost/api/v1/admin/
+// https://api.game-boomin.net/api/v1/admin/
+
+axios.defaults.baseURL = 'https://api.game-boomin.net/api/v1/admin/'
 axios.defaults.withCredentials = true
 
 ReactDOM.render(

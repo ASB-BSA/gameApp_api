@@ -85,7 +85,7 @@ const SettingsDetail = () => {
           <UI.Thead>
             <UI.Tr>
               <UI.Th>設定名</UI.Th>
-              <UI.Th>カラム名(英語)</UI.Th>
+              <UI.Th>カラム名(アッパーキャメルケース)</UI.Th>
               <UI.Th>型</UI.Th>
               <UI.Th>値</UI.Th>
               <UI.Th>操作</UI.Th>

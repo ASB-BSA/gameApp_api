@@ -4,7 +4,6 @@ import (
 	"boomin_game_api/src/database"
 	"boomin_game_api/src/models"
 	"boomin_game_api/src/utils"
-	"fmt"
 	"reflect"
 	"strconv"
 
@@ -121,40 +120,41 @@ func DeleteSettingItem(c *fiber.Ctx) error {
 }
 
 func ExportSetting(c *fiber.Ctx) error {
-	var settings []models.SettingGroup
-	database.DB.Preload("Settings").Find(&settings)
+	var settings models.SettingGroup
+
+	if result := database.DB.Where("group_category = ?", c.Params("id")).Preload("Settings").First(&settings); result.Error != nil {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "Error.",
+		})
+	}
 
 	b := utils.StructBuilder()
 
-	for _, v := range settings {
-		for _, e := range v.Settings {
-			fmt.Println(e)
-			switch e.SettingType {
-			case "string":
-				b.AddField(e.SettingLabel, reflect.TypeOf(""))
-			case "int":
-				b.AddField(e.SettingLabel, reflect.TypeOf(1))
-			case "boolean":
-				b.AddField(e.SettingLabel, reflect.TypeOf(true))
-			}
+	for _, e := range settings.Settings {
+		switch e.SettingType {
+		case "string":
+			b.AddField(e.SettingLabel, reflect.TypeOf(""))
+		case "int":
+			b.AddField(e.SettingLabel, reflect.TypeOf(1))
+		case "boolean":
+			b.AddField(e.SettingLabel, reflect.TypeOf(true))
 		}
 	}
 
 	person := b.Build()
 	i := person.NewInstance()
 
-	for _, v := range settings {
-		for _, e := range v.Settings {
-			switch e.SettingType {
-			case "string":
-				i.SetString(e.SettingLabel, e.SettingValue)
-			case "int":
-				val, _ := strconv.Atoi(e.SettingValue)
-				i.SetInt(e.SettingLabel, val)
-			case "boolean":
-				val, _ := strconv.ParseBool(e.SettingValue)
-				i.SetBool(e.SettingLabel, val)
-			}
+	for _, e := range settings.Settings {
+		switch e.SettingType {
+		case "string":
+			i.SetString(e.SettingLabel, e.SettingValue)
+		case "int":
+			val, _ := strconv.Atoi(e.SettingValue)
+			i.SetInt(e.SettingLabel, val)
+		case "boolean":
+			val, _ := strconv.ParseBool(e.SettingValue)
+			i.SetBool(e.SettingLabel, val)
 		}
 	}
 

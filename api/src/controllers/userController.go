@@ -34,13 +34,37 @@ func PostUser(c *fiber.Ctx) error {
 		Name: p.Name,
 	}
 
-	if result := database.DB.Create(&user); result.Error != nil {
+	tx := database.DB.Begin()
+
+	if result := tx.Create(&user); result.Error != nil {
+		tx.Rollback()
 		return result.Error
+	}
+
+	teams := models.Teams{
+		UsersId: user.ID,
+	}
+
+	if result := tx.Create(&teams); result.Error != nil {
+		tx.Rollback()
+		return result.Error
+	}
+
+	for i := 0; i < 5; i++ {
+		chara := models.TeamsCharacter{
+			TeamsID: teams.ID,
+		}
+
+		if result := tx.Create(&chara); result.Error != nil {
+			tx.Rollback()
+			return result.Error
+		}
 	}
 
 	token, err := middlewares.GenerateJWT(user.ID)
 
 	if err != nil {
+		tx.Rollback()
 		c.Status(400)
 		return c.JSON(fiber.Map{
 			"message": "登録に失敗しました。",
@@ -58,6 +82,8 @@ func PostUser(c *fiber.Ctx) error {
 
 	c.Cookie(&cookie)
 
+	tx.Commit()
+
 	return c.JSON(&user)
 }
 
@@ -72,7 +98,7 @@ func GetUser(c *fiber.Ctx) error {
 	}
 
 	var user models.Users
-	database.DB.Where("id = ?", id).First(&user)
+	database.DB.Where("id = ?", id).Preload("Teams").Preload("Teams.Teams").First(&user)
 
 	return c.JSON(user)
 }

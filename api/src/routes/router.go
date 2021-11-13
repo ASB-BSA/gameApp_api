@@ -12,7 +12,7 @@ func Setup(app *fiber.App) {
 
 	v1 := api.Group("v1")
 
-	v1.Get("settings", controllers.ExportSetting)
+	v1.Get("image/:id", controllers.Images)
 	v1.Post("user", controllers.PostUser)
 
 	admin := v1.Group("admin")
@@ -32,10 +32,13 @@ func Setup(app *fiber.App) {
 	isadmin.Delete("settings/:id", controllers.DeleteSettingItem)
 
 	authen := v1.Use(middlewares.IsAuthenticated)
+	authen.Get("settings/:id", controllers.ExportSetting)
 	authen.Get("user", controllers.GetUser)
 	authen.Get("character", controllers.GetCharacter)
 	authen.Get("room", controllers.GetRoom)
 	authen.Post("room", controllers.PostRoom)
+	authen.Put("room", controllers.PostRoom)
+	authen.Put("team/:id", controllers.PutTeamCharacter)
 
 	battle := authen.Use(middlewares.IsBattle)
 	battle.Get("battle", controllers.GetBattle)

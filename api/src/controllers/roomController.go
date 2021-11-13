@@ -4,6 +4,7 @@ import (
 	"boomin_game_api/src/database"
 	"boomin_game_api/src/middlewares"
 	"boomin_game_api/src/models"
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -17,24 +18,35 @@ func GetRoom(c *fiber.Ctx) error {
 	userId, _ := middlewares.GetUserId(c)
 
 	isSuccess := true
-	var isRoom models.Rooms
+
+	var room models.Rooms
 
 	for isSuccess {
 		if roomId > 99999 {
-			if result := database.DB.Where("room_status = ?", "open").Where("room_number", roomId).First(&isRoom); result.Error != nil {
-				room := models.Rooms{
-					UsersID:    userId,
-					RoomNumber: roomId,
-				}
-				database.DB.Create(&room)
+			room.RoomStatus = "open"
+			room.RoomNumber = roomId
+
+			var count int64
+
+			if res := database.DB.Model(&room).Where("room_states = ?", "open").Count(&count); res.Error != nil && count == 0 {
 				isSuccess = false
+			} else {
+				roomId = rand.Intn(1000000)
 			}
+
+			fmt.Println(count)
+		} else {
+			roomId = rand.Intn(1000000)
 		}
 	}
 
-	return c.JSON(fiber.Map{
-		"room_number": roomId,
-	})
+	room.UsersID = userId
+
+	if res := database.DB.Create(&room); res.Error != nil {
+		return res.Error
+	}
+
+	return c.JSON(room)
 }
 
 type RoomPost struct {

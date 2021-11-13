@@ -1,12 +1,427 @@
 [
   {
-    "name": "吸血鬼",
-    "english": "vampire",
-    "img": "vampire.png"
+      "english": "akpy.png",
+      "img": "akpy.png.png",
+      "name": ""
   },
   {
-    "name": "ワーウルフ",
-    "english": "werewolf",
-    "img": "werewolf.png"
+      "english": "arlaune1.png",
+      "img": "arlaune1.png.png",
+      "name": ""
+  },
+  {
+      "english": "arlaune2.png",
+      "img": "arlaune2.png.png",
+      "name": ""
+  },
+  {
+      "english": "arlaune3.png",
+      "img": "arlaune3.png.png",
+      "name": ""
+  },
+  {
+      "english": "arlaune4.png",
+      "img": "arlaune4.png.png",
+      "name": ""
+  },
+  {
+      "english": "arlaune5.png",
+      "img": "arlaune5.png.png",
+      "name": ""
+  },
+  {
+      "english": "arlaune6.png",
+      "img": "arlaune6.png.png",
+      "name": ""
+  },
+  {
+      "english": "arlaune7.png",
+      "img": "arlaune7.png.png",
+      "name": ""
+  },
+  {
+      "english": "arlaune8.png",
+      "img": "arlaune8.png.png",
+      "name": ""
+  },
+  {
+      "english": "bat1.png",
+      "img": "bat1.png.png",
+      "name": ""
+  },
+  {
+      "english": "bat2.png",
+      "img": "bat2.png.png",
+      "name": ""
+  },
+  {
+      "english": "bat3.png",
+      "img": "bat3.png.png",
+      "name": ""
+  },
+  {
+      "english": "bat4.png",
+      "img": "bat4.png.png",
+      "name": ""
+  },
+  {
+      "english": "bat5.png",
+      "img": "bat5.png.png",
+      "name": ""
+  },
+  {
+      "english": "bat6.png",
+      "img": "bat6.png.png",
+      "name": ""
+  },
+  {
+      "english": "carbunclo1.png",
+      "img": "carbunclo1.png.png",
+      "name": ""
+  },
+  {
+      "english": "carbunclo2.png",
+      "img": "carbunclo2.png.png",
+      "name": ""
+  },
+  {
+      "english": "carbunclo3.png",
+      "img": "carbunclo3.png.png",
+      "name": ""
+  },
+  {
+      "english": "carbunclo4.png",
+      "img": "carbunclo4.png.png",
+      "name": ""
+  },
+  {
+      "english": "caroline1.png",
+      "img": "caroline1.png.png",
+      "name": ""
+  },
+  {
+      "english": "caroline2.png",
+      "img": "caroline2.png.png",
+      "name": ""
+  },
+  {
+      "english": "celeste.png",
+      "img": "celeste.png.png",
+      "name": ""
+  },
+  {
+      "english": "costume1.png",
+      "img": "costume1.png.png",
+      "name": ""
+  },
+  {
+      "english": "costume2.png",
+      "img": "costume2.png.png",
+      "name": ""
+  },
+  {
+      "english": "costume3.png",
+      "img": "costume3.png.png",
+      "name": ""
+  },
+  {
+      "english": "costume4.png",
+      "img": "costume4.png.png",
+      "name": ""
+  },
+  {
+      "english": "costume5.png",
+      "img": "costume5.png.png",
+      "name": ""
+  },
+  {
+      "english": "costume6.png",
+      "img": "costume6.png.png",
+      "name": ""
+  },
+  {
+      "english": "familiar.png",
+      "img": "familiar.png.png",
+      "name": ""
+  },
+  {
+      "english": "ghost_girl.png",
+      "img": "ghost_girl.png.png",
+      "name": ""
+  },
+  {
+      "english": "ghost1.png",
+      "img": "ghost1.png.png",
+      "name": ""
+  },
+  {
+      "english": "ghost2.png",
+      "img": "ghost2.png.png",
+      "name": ""
+  },
+  {
+      "english": "ghost3.png",
+      "img": "ghost3.png.png",
+      "name": ""
+  },
+  {
+      "english": "ghost4.png",
+      "img": "ghost4.png.png",
+      "name": ""
+  },
+  {
+      "english": "ghost5.png",
+      "img": "ghost5.png.png",
+      "name": ""
+  },
+  {
+      "english": "ghost6.png",
+      "img": "ghost6.png.png",
+      "name": ""
+  },
+  {
+      "english": "guraki_servant.png",
+      "img": "guraki_servant.png.png",
+      "name": ""
+  },
+  {
+      "english": "horror_doll1.png",
+      "img": "horror_doll1.png.png",
+      "name": ""
+  },
+  {
+      "english": "horror_doll2.png",
+      "img": "horror_doll2.png.png",
+      "name": ""
+  },
+  {
+      "english": "horror_doll3.png",
+      "img": "horror_doll3.png.png",
+      "name": ""
+  },
+  {
+      "english": "horror_doll4.png",
+      "img": "horror_doll4.png.png",
+      "name": ""
+  },
+  {
+      "english": "jade_devil.png",
+      "img": "jade_devil.png.png",
+      "name": ""
+  },
+  {
+      "english": "katarov1.png",
+      "img": "katarov1.png.png",
+      "name": ""
+  },
+  {
+      "english": "katarov2.png",
+      "img": "katarov2.png.png",
+      "name": ""
+  },
+  {
+      "english": "katarov3.png",
+      "img": "katarov3.png.png",
+      "name": ""
+  },
+  {
+      "english": "knight1.png",
+      "img": "knight1.png.png",
+      "name": ""
+  },
+  {
+      "english": "knight2.png",
+      "img": "knight2.png.png",
+      "name": ""
+  },
+  {
+      "english": "knight3.png",
+      "img": "knight3.png.png",
+      "name": ""
+  },
+  {
+      "english": "knight4.png",
+      "img": "knight4.png.png",
+      "name": ""
+  },
+  {
+      "english": "knight5.png",
+      "img": "knight5.png.png",
+      "name": ""
+  },
+  {
+      "english": "knight6.png",
+      "img": "knight6.png.png",
+      "name": ""
+  },
+  {
+      "english": "lamb_goat.png",
+      "img": "lamb_goat.png.png",
+      "name": ""
+  },
+  {
+      "english": "machine_load1.png",
+      "img": "machine_load1.png.png",
+      "name": ""
+  },
+  {
+      "english": "machine_load2.png",
+      "img": "machine_load2.png.png",
+      "name": ""
+  },
+  {
+      "english": "machine_load3.png",
+      "img": "machine_load3.png.png",
+      "name": ""
+  },
+  {
+      "english": "machine_load4.png",
+      "img": "machine_load4.png.png",
+      "name": ""
+  },
+  {
+      "english": "machine_load5.png",
+      "img": "machine_load5.png.png",
+      "name": ""
+  },
+  {
+      "english": "mayu_girl.png",
+      "img": "mayu_girl.png.png",
+      "name": ""
+  },
+  {
+      "english": "merry1.png",
+      "img": "merry1.png.png",
+      "name": ""
+  },
+  {
+      "english": "merry2.png",
+      "img": "merry2.png.png",
+      "name": ""
+  },
+  {
+      "english": "pappeter.png",
+      "img": "pappeter.png.png",
+      "name": ""
+  },
+  {
+      "english": "robe1.png",
+      "img": "robe1.png.png",
+      "name": ""
+  },
+  {
+      "english": "robe2.png",
+      "img": "robe2.png.png",
+      "name": ""
+  },
+  {
+      "english": "robe3.png",
+      "img": "robe3.png.png",
+      "name": ""
+  },
+  {
+      "english": "robe4.png",
+      "img": "robe4.png.png",
+      "name": ""
+  },
+  {
+      "english": "robe5.png",
+      "img": "robe5.png.png",
+      "name": ""
+  },
+  {
+      "english": "robe6.png",
+      "img": "robe6.png.png",
+      "name": ""
+  },
+  {
+      "english": "shoggoth.png",
+      "img": "shoggoth.png.png",
+      "name": ""
+  },
+  {
+      "english": "slime1.png",
+      "img": "slime1.png.png",
+      "name": ""
+  },
+  {
+      "english": "slime2.png",
+      "img": "slime2.png.png",
+      "name": ""
+  },
+  {
+      "english": "slime3.png",
+      "img": "slime3.png.png",
+      "name": ""
+  },
+  {
+      "english": "slime4.png",
+      "img": "slime4.png.png",
+      "name": ""
+  },
+  {
+      "english": "slime5.png",
+      "img": "slime5.png.png",
+      "name": ""
+  },
+  {
+      "english": "slime6.png",
+      "img": "slime6.png.png",
+      "name": ""
+  },
+  {
+      "english": "slime7.png",
+      "img": "slime7.png.png",
+      "name": ""
+  },
+  {
+      "english": "slime8.png",
+      "img": "slime8.png.png",
+      "name": ""
+  },
+  {
+      "english": "tsuchinoko.png",
+      "img": "tsuchinoko.png.png",
+      "name": ""
+  },
+  {
+      "english": "vampire.png",
+      "img": "vampire.png.png",
+      "name": ""
+  },
+  {
+      "english": "werewolf.png",
+      "img": "werewolf.png.png",
+      "name": ""
+  },
+  {
+      "english": "worm1.png",
+      "img": "worm1.png.png",
+      "name": ""
+  },
+  {
+      "english": "worm2.png",
+      "img": "worm2.png.png",
+      "name": ""
+  },
+  {
+      "english": "worm3.png",
+      "img": "worm3.png.png",
+      "name": ""
+  },
+  {
+      "english": "worm4.png",
+      "img": "worm4.png.png",
+      "name": ""
+  },
+  {
+      "english": "worm5.png",
+      "img": "worm5.png.png",
+      "name": ""
+  },
+  {
+      "english": "worm6.png",
+      "img": "worm6.png.png",
+      "name": ""
   }
 ]

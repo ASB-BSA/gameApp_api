@@ -10,10 +10,11 @@ type Characters struct {
 }
 
 type Parameter struct {
-	Attack    int `json:"attack"`
-	Defence   int `json:"defence"`
-	Avoidance int `json:"critical_rate"`
-	Hit       int `json:"agility"`
-	Hp        int `json:"hp"`
-	Mp        int `json:"mp"`
+	Attack       int `json:"attack"`
+	Defence      int `json:"defence"`
+	Avoidance    int `json:"avoidance"`
+	CriticalRate int `json:"criticalRate"`
+	Agility      int `json:"agility"`
+	Hp           int `json:"hp"`
+	Mp           int `json:"mp"`
 }

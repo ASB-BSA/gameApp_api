@@ -16,8 +16,8 @@ services:
       DOMAINS: 'api.localhost -> http://api:1129, admin.localhost -> http://admin:8001'
       # STAGE: 'production'
       STAGE: 'local'
-    # extra_hosts:
-    #   - "localhost:192.168.1.188"
+    extra_hosts:
+      - "localhost:192.168.1.188"
 
   api:
     build: ./api
@@ -43,9 +43,9 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: game
-      MYSQL_ROOT_PASSWORD: game
+      MYSQL_ROOT_PASSWORD: vY95cJ3!Z
       MYSQL_USER: game
-      MYSQL_PASSWORD: game
+      MYSQL_PASSWORD: vY95cJ3!Z
       TZ: "Asia/Tokyo"
     volumes:
       - .dbdata:/var/lib/mysql
@@ -64,7 +64,7 @@ services:
   #   volumes:
   #     - ./admin:/usr/src/app
   #   tty: true
-  #   extra_hosts:
-  #     - "localhost:192.168.0.13"
-  #   depends_on:
-  #     - api
+    # extra_hosts:
+    #   - "localhost:192.168.0.13"
+    # depends_on:
+    #   - api
