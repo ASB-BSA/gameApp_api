@@ -35,10 +35,10 @@ func Setup(app *fiber.App) {
 	authen.Get("settings/:id", controllers.ExportSetting)
 	authen.Get("user", controllers.GetUser)
 	authen.Get("character", controllers.GetCharacter)
+	authen.Put("team/:id", controllers.PutTeamCharacter)
 	authen.Get("room", controllers.GetRoom)
 	authen.Post("room", controllers.PostRoom)
 	authen.Put("room", controllers.PostRoom)
-	authen.Put("team/:id", controllers.PutTeamCharacter)
 
 	battle := authen.Use(middlewares.IsBattle)
 	battle.Get("battle", controllers.GetBattle)

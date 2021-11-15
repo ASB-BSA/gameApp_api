@@ -50,7 +50,7 @@ func GetRoom(c *fiber.Ctx) error {
 }
 
 type RoomPost struct {
-	RoomNumber int `json:"room_number"`
+	RoomNumber int `json:"roomNumber"`
 }
 
 func PostRoom(c *fiber.Ctx) error {
