@@ -70,6 +70,8 @@ func PostRoom(c *fiber.Ctx) error {
 		})
 	}
 
+	fmt.Println(p.RoomNumber)
+
 	var room models.Rooms
 	if result := database.DB.Where("room_status = ?", "open").Where("room_number = ?", p.RoomNumber).First(&room); result.Error != nil {
 		c.Status(400)

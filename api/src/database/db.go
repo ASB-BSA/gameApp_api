@@ -30,7 +30,6 @@ func Connect() {
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func AutoMigrate() {

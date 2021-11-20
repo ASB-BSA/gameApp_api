@@ -12,6 +12,8 @@ const Layout = () => {
         py={16}
         px={4}
         bg="gray.700"
+        pos="sticky"
+        top="0"
       >
         <UI.Stack spacing={8}>
           {RouterConfig.map(e => {

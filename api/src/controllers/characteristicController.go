@@ -23,15 +23,16 @@ func CreateCharacteristic(c *fiber.Ctx) error {
 		return err
 	}
 
-	conditionsValue, _ := strconv.Atoi(data["conditions_value"])
-	howMuch, _ := strconv.Atoi(data["how_much"])
+	conditionsValue, _ := strconv.Atoi(data["conditionsValue"])
+	howMuch, _ := strconv.Atoi(data["howMuch"])
 
 	characteristic := models.Characteristic{
 		Name:                 data["name"],
-		ConditionsParameter:  data["conditions_parameter"],
+		Timing:               data["timing"],
+		ConditionsParameter:  data["conditionsParameter"],
 		ConditionsValue:      conditionsValue,
-		ConditionsExpression: data["conditions_expression"],
-		ToWhom:               data["to_whom"],
+		ConditionsExpression: data["conditionsExpression"],
+		ToWhom:               data["toWhom"],
 		Parameter:            data["parameter"],
 		Happen:               data["happen"],
 		HowMuch:              howMuch,

@@ -8,6 +8,7 @@ import (
 )
 
 func Setup(app *fiber.App) {
+
 	api := app.Group("api")
 
 	v1 := api.Group("v1")
@@ -19,6 +20,8 @@ func Setup(app *fiber.App) {
 	admin.Post("login", controllers.AdminLogin)
 
 	isadmin := admin.Use(middlewares.IsAdmin)
+	isadmin.Get("character", controllers.GetCharacter)
+	isadmin.Put("character/:id", controllers.PutCharacter)
 	isadmin.Get("admins", controllers.Admins)
 	isadmin.Post("register", controllers.AdminRegister)
 	isadmin.Get("characteristic", controllers.GetCharacteristic)
@@ -32,6 +35,7 @@ func Setup(app *fiber.App) {
 	isadmin.Delete("settings/:id", controllers.DeleteSettingItem)
 
 	authen := v1.Use(middlewares.IsAuthenticated)
+
 	authen.Get("settings/:id", controllers.ExportSetting)
 	authen.Get("user", controllers.GetUser)
 	authen.Get("character", controllers.GetCharacter)

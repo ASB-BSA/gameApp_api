@@ -7,6 +7,7 @@ type Characters struct {
 	Name    string `json:"name"`
 	English string `json:"english"`
 	Img     string `json:"img"`
+	Icon    string `json:"icon"`
 }
 
 type Parameter struct {
