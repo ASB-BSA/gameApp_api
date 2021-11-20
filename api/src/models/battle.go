@@ -4,11 +4,12 @@ import "gorm.io/gorm"
 
 type Battle struct {
 	gorm.Model
-	UsersID      uint   `json:"-"`
-	UsersTeam    uint   `json:"user_team"`
-	Users        *Users `json:"create_user"`
-	OpponentId   uint   `json:"-"`
-	OpponentUser *Users `json:"opponent_user" gorm:"foreignKey:OpponentId"`
-	OpponentTeam uint   `json:"opponent_team"`
-	IsActive     bool   `json:"is_active"`
+	RoomsID      uint  `json:"-"`
+	UsersID      uint  `json:"userId"`
+	UsersTeam    uint  `json:"userTeam"`
+	User         Users `json:"createUser" gorm:"foreignKey:UsersID"`
+	OpponentId   uint  `json:"opponentId"`
+	OpponentUser Users `json:"opponentUser" gorm:"foreignKey:OpponentId"`
+	OpponentTeam uint  `json:"opponentTeam"`
+	IsActive     bool  `json:"isActive" gorm:"default:true;"`
 }
