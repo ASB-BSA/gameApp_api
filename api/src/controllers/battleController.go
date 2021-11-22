@@ -29,10 +29,16 @@ func PostBattle(c *fiber.Ctx) error {
 		RoomsID: uint(roomId),
 	}
 
-	// tx := database.DB.Begin()
+	tx := database.DB.Begin()
 
 	if res := database.DB.First(&battle); res.Error != nil {
 		battle.UsersID = userId
+		battle.OpponentID = uint(0)
+
+		if result := tx.Create(&battle); result.Error != nil {
+			tx.Rollback()
+			return result.Error
+		}
 	}
 
 	database.DB.Preload("User").Preload("OpponentUser").First(&battle)

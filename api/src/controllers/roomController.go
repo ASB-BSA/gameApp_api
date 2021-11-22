@@ -70,8 +70,6 @@ func PostRoom(c *fiber.Ctx) error {
 		})
 	}
 
-	fmt.Println(p.RoomNumber)
-
 	var room models.Rooms
 	if result := database.DB.Where("room_status = ?", "open").Where("room_number = ?", p.RoomNumber).First(&room); result.Error != nil {
 		c.Status(400)
@@ -90,7 +88,79 @@ func PostRoom(c *fiber.Ctx) error {
 
 	room.OpponentId = userId
 	room.RoomStatus = "close"
-	database.DB.Save(&room)
 
-	return c.JSON(room)
+	tx := database.DB.Begin()
+
+	if res := tx.Save(&room); res.Error != nil {
+		tx.Rollback()
+		return res.Error
+	}
+
+	userTeamId, err := CreateBattleTeam(room.UsersID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	opponentTeamId, err := CreateBattleTeam(room.OpponentId)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	battle := models.Battle{
+		RoomsID:         room.ID,
+		OpponentID:      room.OpponentId,
+		OpponentTeamsID: opponentTeamId,
+		UsersID:         room.UsersID,
+		UserTeamsID:     userTeamId,
+	}
+
+	if res := tx.Create(&battle); res.Error != nil {
+		tx.Rollback()
+		return res.Error
+	}
+
+	tx.Commit()
+
+	database.DB.Preload("User").Preload("UserTeams").Preload("UserTeams.Teams").Preload("OpponentUser").Preload("OpponentTeams").Preload("OpponentTeams.Teams").First(&battle)
+
+	return c.JSON(battle)
+}
+
+func CreateBattleTeam(id uint) (uint, error) {
+	var teams models.BattleTeams
+
+	tx := database.DB.Begin()
+
+	if res := tx.Create(&teams); res.Error != nil {
+		tx.Rollback()
+		return 0, res.Error
+	}
+
+	myTeams := models.Teams{
+		UsersId: id,
+	}
+
+	if res := tx.Preload("Teams").First(&myTeams); res.Error != nil {
+		tx.Rollback()
+		return 0, res.Error
+	}
+
+	for _, v := range myTeams.Teams {
+		chara := models.BattleCharacter{
+			BattleTeamsID: teams.ID,
+			Parameter:     v.Parameter,
+			CharacterId:   v.CharacterId,
+		}
+
+		if result := tx.Create(&chara); result.Error != nil {
+			tx.Rollback()
+			return 0, result.Error
+		}
+	}
+
+	tx.Commit()
+
+	return teams.ID, nil
 }

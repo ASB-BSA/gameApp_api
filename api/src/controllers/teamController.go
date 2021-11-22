@@ -36,6 +36,7 @@ func PutTeamCharacter(c *fiber.Ctx) error {
 	}
 
 	chara.ID = uint(id)
+	chara.CharacterId = uint(data["characterId"])
 	chara.Attack = data["attack"]
 	chara.Defence = data["defence"]
 	chara.Avoidance = data["avoidance"]
