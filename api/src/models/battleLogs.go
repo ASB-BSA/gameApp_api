@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type BattleLogs struct {
-	gorm.Model
+	Model
 	BattleID          uint   `json:"-"`
 	BattleCharacterID uint   `json:"-"`
 	Parameter         string `json:"parameter"`

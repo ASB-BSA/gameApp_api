@@ -2,11 +2,10 @@ package models
 
 import (
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 type Admin struct {
-	gorm.Model
+	Model
 	User     string `json:"user"`
 	Password []byte `json:"-"`
 }

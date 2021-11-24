@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type Characteristic struct {
-	gorm.Model
+	Model
 	Name                 string `json:"name"`
 	Timing               string `json:"timing" gorm:"type:enum('start', 'attack', 'damage', 'end'); not null"`
 	ConditionsParameter  string `json:"conditionsParameter" gorm:"type: enum('hp', 'damage'); default:'hp'; not null"`
