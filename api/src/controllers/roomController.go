@@ -4,6 +4,7 @@ import (
 	"boomin_game_api/src/database"
 	"boomin_game_api/src/middlewares"
 	"boomin_game_api/src/models"
+	"boomin_game_api/src/utils"
 	"fmt"
 	"math/rand"
 	"time"
@@ -17,8 +18,14 @@ func GetRoom(c *fiber.Ctx) error {
 
 	userId, _ := middlewares.GetUserId(c)
 
-	isSuccess := true
+	if err := utils.CheckTeams(userId); err != nil {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "チームが設定されていません",
+		})
+	}
 
+	isSuccess := true
 	var room models.Rooms
 
 	for isSuccess {
@@ -56,6 +63,15 @@ type RoomPost struct {
 func PostRoom(c *fiber.Ctx) error {
 	p := new(RoomPost)
 
+	userId, _ := middlewares.GetUserId(c)
+
+	if err := utils.CheckTeams(userId); err != nil {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "チームが設定されていません",
+		})
+	}
+
 	if err := c.BodyParser(p); err != nil {
 		c.Status(400)
 		return c.JSON(fiber.Map{
@@ -78,7 +94,6 @@ func PostRoom(c *fiber.Ctx) error {
 		})
 	}
 
-	userId, _ := middlewares.GetUserId(c)
 	if room.UsersID == userId {
 		c.Status(400)
 		return c.JSON(fiber.Map{
