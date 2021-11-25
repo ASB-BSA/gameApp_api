@@ -5,7 +5,6 @@ import (
 	"boomin_game_api/src/middlewares"
 	"boomin_game_api/src/models"
 	"boomin_game_api/src/utils"
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -41,7 +40,6 @@ func GetRoom(c *fiber.Ctx) error {
 				roomId = rand.Intn(1000000)
 			}
 
-			fmt.Println(count)
 		} else {
 			roomId = rand.Intn(1000000)
 		}

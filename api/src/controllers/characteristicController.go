@@ -23,8 +23,15 @@ func CreateCharacteristic(c *fiber.Ctx) error {
 		return err
 	}
 
-	conditionsValue, _ := strconv.Atoi(data["conditionsValue"])
-	howMuch, _ := strconv.Atoi(data["howMuch"])
+	conditionsValue, err := strconv.Atoi(data["conditionsValue"])
+	if err != nil {
+		return err
+	}
+
+	howMuch, err := strconv.Atoi(data["howMuch"])
+	if err != nil {
+		return err
+	}
 
 	characteristic := models.Characteristic{
 		Name:                 data["name"],

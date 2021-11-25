@@ -23,19 +23,20 @@ const Characteristic = () => {
   const { register, setValue, handleSubmit, reset } = useForm<CharacteristicStateType>({
     defaultValues: {
       name: "",
-      conditions_parameter: 'hp',
-      conditions_value: 0,
-      conditions_expression: '>',
-      to_whom: 'myself',
+      timing: 'start',
+      conditionsParameter: 'hp',
+      conditionsValue: 0,
+      conditionsExpression: '>',
+      toWhom: 'myself',
       parameter: 'attack',
       happen: '+',
-      how_much: 0,
+      howMuch: 0,
     }
   });
 
   const onSubmit = handleSubmit(data => {
-    data.conditions_value = String(data.conditions_value)
-    data.how_much = String(data.how_much)
+    data.conditionsValue = String(data.conditionsValue)
+    data.howMuch = String(data.howMuch)
     
     setCharacteristics([...characteristics, data])
     axios.post(`characteristic`, data)
@@ -65,7 +66,7 @@ const Characteristic = () => {
           <UI.Thead>
             <UI.Tr>
               <UI.Th>技名</UI.Th>
-              <UI.Th colSpan={7}>効果</UI.Th>
+              <UI.Th colSpan={8}>効果</UI.Th>
               <UI.Th>操作</UI.Th>
             </UI.Tr>
           </UI.Thead>
@@ -75,7 +76,7 @@ const Characteristic = () => {
                 return (
                   <UI.Tr key={i}>
                     <UI.Td>{e.name}</UI.Td>
-                    <UI.Td colSpan={7}>{ConvertToText(e)}</UI.Td>
+                    <UI.Td colSpan={8}>{ConvertToText(e)}</UI.Td>
                     <UI.Td>
                       <UI.Stack
                         direction="row"
@@ -100,28 +101,36 @@ const Characteristic = () => {
             <UI.Tr>
               <UI.Td><UI.Input type="text" {...register("name")} /></UI.Td>
               <UI.Td>
-                <UI.Select {...register("conditions_parameter")} >
+                <UI.Select {...register("timing")} >
+                  <option value="start">ターン開始時</option>
+                  <option value="attack">攻撃した時</option>
+                  <option value="damage">ダメージを受けたとき</option>
+                  <option value="end">ターン終了時</option>
+                </UI.Select>
+              </UI.Td>
+              <UI.Td>
+                <UI.Select {...register("conditionsParameter")} >
                   <option value="hp">体力</option>
                   <option value="damage">ダメージ</option>
                 </UI.Select>
               </UI.Td>
               <UI.Td>
                 <UI.Flex alignItems="flex-end">
-                  <UI.NumberInput onChange={e => setValue("conditions_value", Number(e))}>
+                  <UI.NumberInput onChange={e => setValue("conditionsValue", Number(e))}>
                     <UI.NumberInputField />
                   </UI.NumberInput>
                   <UI.Text>%</UI.Text>
                 </UI.Flex>
               </UI.Td>
               <UI.Td>
-                <UI.Select {...register("conditions_expression")} >
+                <UI.Select {...register("conditionsExpression")} >
                   <option value=">">以下</option>
                   <option value="<">以上</option>
                   <option value="=">に</option>
                 </UI.Select>
               </UI.Td>
               <UI.Td>
-                <UI.Select {...register("to_whom")} >
+                <UI.Select {...register("toWhom")} >
                   <option value="myself">自分に</option>
                   <option value="all_allies">味方全体に</option>
                   <option value="random_allies">ランダムで味方単体に</option>
@@ -140,7 +149,7 @@ const Characteristic = () => {
                 </UI.Select>
               </UI.Td>
               <UI.Td>
-                <UI.NumberInput onChange={e => setValue("how_much", Number(e))}>
+                <UI.NumberInput onChange={e => setValue("howMuch", Number(e))}>
                   <UI.NumberInputField />
                 </UI.NumberInput>
               </UI.Td>

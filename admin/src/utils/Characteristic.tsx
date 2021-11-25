@@ -1,6 +1,19 @@
 import { CharacteristicStateType } from "../atoms/CharacteristicState";
 
-const paramFunc = (e: CharacteristicStateType['conditions_parameter']) => {
+const timingFunc = (e: CharacteristicStateType['timing']) => {
+    switch(e) {
+        case 'start':
+            return 'ターン開始時'
+        case 'damage':
+            return 'ダメージを受けたとき'
+        case 'attack':
+            return '攻撃した時'
+        case 'end':
+            return 'ターン終了時'
+    }
+}
+
+const paramFunc = (e: CharacteristicStateType['conditionsParameter']) => {
     switch(e) {
         case 'hp':
             return '残りHPが'
@@ -9,7 +22,7 @@ const paramFunc = (e: CharacteristicStateType['conditions_parameter']) => {
     }
 }
 
-const expressionFunc = (e: CharacteristicStateType['conditions_expression']) => {
+const expressionFunc = (e: CharacteristicStateType['conditionsExpression']) => {
     switch(e) {
         case '>':
             return '以下のとき'
@@ -20,7 +33,7 @@ const expressionFunc = (e: CharacteristicStateType['conditions_expression']) => 
     }
 }
 
-const toWhomFunc = (e: CharacteristicStateType['to_whom']) => {
+const toWhomFunc = (e: CharacteristicStateType['toWhom']) => {
     switch(e) {
         case 'myself':
             return '自分'
@@ -65,15 +78,16 @@ const HappenFunc = (e: CharacteristicStateType['happen']) => {
 
 const ConvertToText = (data:CharacteristicStateType):string => {
     console.log(data)
-    const param = paramFunc(data.conditions_parameter)
-    const value = String(data.conditions_value)
-    const expression = expressionFunc(data.conditions_expression)
-    const to_whom = toWhomFunc(data.to_whom)
+    const timing = timingFunc(data.timing)
+    const param = paramFunc(data.conditionsParameter)
+    const value = String(data.conditionsValue)
+    const expression = expressionFunc(data.conditionsExpression)
+    const toWhom = toWhomFunc(data.toWhom)
     const parameter = ParameterFunc(data.parameter)
-    const how_much = String(data.how_much)
+    const howMuch = String(data.howMuch)
     const happen = HappenFunc(data.happen)
 
-    const result = `${param}${value}%${expression}、${to_whom}の${parameter}を${how_much}${happen}`
+    const result = `${timing}、${param}${value}%${expression}、${toWhom}の${parameter}を${howMuch}${happen}`
 
     return result
 }
