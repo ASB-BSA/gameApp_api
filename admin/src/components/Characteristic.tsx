@@ -37,7 +37,7 @@ const Characteristic = () => {
   const onSubmit = handleSubmit(data => {
     data.conditionsValue = String(data.conditionsValue)
     data.howMuch = String(data.howMuch)
-    
+
     setCharacteristics([...characteristics, data])
     axios.post(`characteristic`, data)
       .then(() => {

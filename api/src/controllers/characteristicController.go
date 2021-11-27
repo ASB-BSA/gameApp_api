@@ -3,15 +3,35 @@ package controllers
 import (
 	"boomin_game_api/src/database"
 	"boomin_game_api/src/models"
+	"context"
+	"encoding/json"
 	"strconv"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func GetCharacteristic(c *fiber.Ctx) error {
 	var Characteristic []models.Characteristic
+	var ctx = context.Background()
 
-	database.DB.Find(&Characteristic)
+	result, err := database.Cache.Get(ctx, "characteristic").Result()
+
+	if err != nil {
+		database.DB.Find(&Characteristic)
+
+		bytes, err := json.Marshal(Characteristic)
+
+		if err != nil {
+			return err
+		}
+
+		if err := database.Cache.Set(ctx, "characteristic", bytes, 30*time.Minute).Err(); err != nil {
+			return err
+		}
+	} else {
+		json.Unmarshal([]byte(result), &Characteristic)
+	}
 
 	return c.JSON(Characteristic)
 }

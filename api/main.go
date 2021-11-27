@@ -20,6 +20,8 @@ func init() {
 func main() {
 	database.Connect()
 	database.AutoMigrate()
+	database.SetupRedis()
+	database.SetupCecheChannel()
 
 	app := fiber.New()
 

@@ -3,16 +3,36 @@ package controllers
 import (
 	"boomin_game_api/src/database"
 	"boomin_game_api/src/models"
+	"context"
+	"encoding/json"
 	"strconv"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func GetCharacter(c *fiber.Ctx) error {
 	var character []models.Characters
+	var ctx = context.Background()
 
-	if result := database.DB.Find(&character); result.Error != nil {
-		return result.Error
+	result, err := database.Cache.Get(ctx, "character").Result()
+
+	if err != nil {
+		if result := database.DB.Find(&character); result.Error != nil {
+			return result.Error
+		}
+
+		bytes, err := json.Marshal(character)
+
+		if err != nil {
+			return err
+		}
+
+		if err := database.Cache.Set(ctx, "character", bytes, 30*time.Minute).Err(); err != nil {
+			return err
+		}
+	} else {
+		json.Unmarshal([]byte(result), &character)
 	}
 
 	return c.JSON(character)
