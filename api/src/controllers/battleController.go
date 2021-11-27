@@ -4,46 +4,61 @@ import (
 	"boomin_game_api/src/database"
 	"boomin_game_api/src/middlewares"
 	"boomin_game_api/src/models"
-	"strconv"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 type BattlePost struct {
-	Name string `json:"name"`
+	BattleId int `json:"battleId"`
 }
 
 func PostBattle(c *fiber.Ctx) error {
-	var data map[string]string
-
-	if err := c.BodyParser(&data); err != nil {
-		c.Status(400)
-		return err
-	}
+	p := new(BattlePost)
 
 	userId, _ := middlewares.GetUserId(c)
 
-	roomId, _ := strconv.Atoi(data["roomId"])
+	var battle models.Battle
 
-	battle := models.Battle{
-		RoomsID: uint(roomId),
+	battle.ID = uint(p.BattleId)
+
+	if result := database.DB.Where("is_active = ?", 1).First(&battle); result.Error != nil {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "対戦情報が見つかりませんでした",
+		})
 	}
 
-	tx := database.DB.Begin()
-
-	if res := database.DB.First(&battle); res.Error != nil {
-		battle.UsersID = userId
-		battle.OpponentID = uint(0)
-
-		if result := tx.Create(&battle); result.Error != nil {
-			tx.Rollback()
-			return result.Error
-		}
+	if battle.UsersID != userId && battle.OpponentID != userId {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "対戦情報が見つかりませんでした",
+		})
 	}
 
-	database.DB.Preload("User").Preload("OpponentUser").First(&battle)
+	token, err := middlewares.GenerateBattleToken(uint(p.BattleId))
 
-	return c.JSON(battle)
+	if err != nil {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "対戦情報が見つかりませんでした",
+		})
+	}
+
+	cookie := fiber.Cookie{
+		Name:     "battle-jwt",
+		Value:    token,
+		Expires:  time.Now().AddDate(10, 0, 0),
+		SameSite: "None",
+		Secure:   true,
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"message": "Success.",
+	})
 }
 
 func GetBattle(c *fiber.Ctx) error {

@@ -6,6 +6,7 @@ import (
 	"boomin_game_api/src/models"
 	"boomin_game_api/src/utils"
 	"math/rand"
+	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -52,6 +53,24 @@ func GetRoom(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(room)
+}
+
+func DeleteRoom(c *fiber.Ctx) error {
+	id, _ := strconv.Atoi(c.Params("id"))
+
+	var room models.Rooms
+	room.ID = uint(id)
+
+	database.DB.First(&room)
+
+	userId, _ := middlewares.GetUserId(c)
+	if room.UsersID == userId {
+		database.DB.Delete(&room)
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Success.",
+	})
 }
 
 type RoomPost struct {
@@ -133,6 +152,24 @@ func PostRoom(c *fiber.Ctx) error {
 		tx.Rollback()
 		return res.Error
 	}
+
+	token, err := middlewares.GenerateBattleToken(battle.ID)
+
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	cookie := fiber.Cookie{
+		Name:     "battle-jwt",
+		Value:    token,
+		Expires:  time.Now().AddDate(10, 0, 0),
+		SameSite: "None",
+		Secure:   true,
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
 
 	tx.Commit()
 

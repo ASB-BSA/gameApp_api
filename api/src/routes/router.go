@@ -44,8 +44,9 @@ func Setup(app *fiber.App) {
 	authen.Get("room", controllers.GetRoom)
 	authen.Post("room", controllers.PostRoom)
 	authen.Put("room", controllers.PostRoom)
+	authen.Delete("room/:id", controllers.DeleteRoom)
 	authen.Post("battle", controllers.PostBattle)
 
-	battle := authen.Use(middlewares.IsBattle)
-	battle.Get("battle", controllers.GetBattle)
+	// battle := authen.Use(middlewares.IsBattle)
+	// battle.Get("battle", controllers.GetBattle)
 }
