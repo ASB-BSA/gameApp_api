@@ -38,6 +38,7 @@ func Setup(app *fiber.App) {
 
 	authen.Get("settings/:id", controllers.ExportSetting)
 	authen.Get("user", controllers.GetUser)
+	authen.Get("characteristic", controllers.GetCharacteristic)
 	authen.Get("character", controllers.GetCharacter)
 	authen.Put("team/:id", controllers.PutTeamCharacter)
 	authen.Get("room", controllers.GetRoom)

@@ -30,5 +30,6 @@ BASEURL=https://domain/api/v1
 | /user | - | 〇 | GET | ユーザー情報取得 |
 | /character | - | 〇 | GET | ゲーム内のキャラクターリソースを取得する |
 | /team/:id | 編集するキャラID | 〇 | PUT | チームキャラクター情報更新 |
+| /characteristic | - | 〇 | GET | 特技一覧を取得 |
 | /room | - | 〇 | GET | 対戦ルーム作成 |
 | /room | { roomNumber: 000000 } | 〇 | POST | ルームに参加 |
