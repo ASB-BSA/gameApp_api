@@ -52,7 +52,8 @@ func PostUser(c *fiber.Ctx) error {
 
 	for i := 0; i < 5; i++ {
 		chara := models.TeamsCharacter{
-			TeamsID: teams.ID,
+			TeamsID:     teams.ID,
+			CharacterId: uint(i + 1),
 		}
 
 		if result := tx.Create(&chara); result.Error != nil {

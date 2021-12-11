@@ -173,6 +173,12 @@ func PostRoom(c *fiber.Ctx) error {
 
 	tx.Commit()
 
+	data := map[string]string{
+		"battleID": strconv.Itoa(int(battle.ID)),
+	}
+
+	database.PusherClient.Trigger("battle-room", strconv.Itoa(room.RoomNumber), data)
+
 	database.DB.Preload("User").Preload("UserTeams").Preload("UserTeams.Teams").Preload("OpponentUser").Preload("OpponentTeams").Preload("OpponentTeams.Teams").First(&battle)
 
 	return c.JSON(battle)

@@ -56,13 +56,38 @@ func PostBattle(c *fiber.Ctx) error {
 
 	c.Cookie(&cookie)
 
-	return c.JSON(fiber.Map{
-		"message": "Success.",
-	})
+	database.DB.Preload("User").Preload("UserTeams").Preload("UserTeams.Teams").Preload("OpponentUser").Preload("OpponentTeams").Preload("OpponentTeams.Teams").First(&battle)
+
+	return c.JSON(battle)
 }
 
 func GetBattle(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"message": "Success",
-	})
+	id, _ := middlewares.GetBattleId(c)
+
+	var battle models.Battle
+	battle.ID = id
+
+	if result := database.DB.Preload("User").Preload("UserTeams").Preload("UserTeams.Teams").Preload("OpponentUser").Preload("OpponentTeams").Preload("OpponentTeams.Teams").Where("is_active = ?", "1").First(&battle); result.Error != nil {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "対戦情報が見つかりませんでした",
+		})
+	}
+
+	return c.JSON(battle)
+}
+
+func CreateBattleLog(c *fiber.Ctx) error {
+	id, _ := middlewares.GetBattleId(c)
+	var battle models.Battle
+	battle.ID = id
+
+	if result := database.DB.Preload("User").Preload("UserTeams").Preload("UserTeams.Teams").Preload("OpponentUser").Preload("OpponentTeams").Preload("OpponentTeams.Teams").Where("is_active = ?", "1").First(&battle); result.Error != nil {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "対戦情報が見つかりませんでした",
+		})
+	}
+
+	return nil
 }

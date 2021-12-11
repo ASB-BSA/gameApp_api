@@ -22,7 +22,7 @@ func IsBattle(c *fiber.Ctx) error {
 	}
 	SecretKey := os.Getenv("GAME_SECKEY")
 
-	cookie := c.Cookies("battle")
+	cookie := c.Cookies("battle-jwt")
 
 	token, err := jwt.ParseWithClaims(cookie, &ClaimsWithBattle{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(SecretKey), nil
@@ -51,4 +51,28 @@ func GenerateBattleToken(id uint) (string, error) {
 	payload.ExpiresAt = time.Now().AddDate(10, 0, 0).Unix()
 
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, payload).SignedString([]byte(SecretKey))
+}
+
+func GetBattleId(c *fiber.Ctx) (uint, error) {
+	err := godotenv.Load(fmt.Sprintf("./%s.env", os.Getenv("GO_ENV")))
+	if err != nil {
+		panic("Error getting .env data!")
+	}
+	SecretKey := os.Getenv("GAME_SECKEY")
+
+	cookie := c.Cookies("battle-jwt")
+
+	token, err := jwt.ParseWithClaims(cookie, &ClaimsWithScope{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(SecretKey), nil
+	})
+
+	if err != nil {
+		return 0, err
+	}
+
+	payload := token.Claims.(*ClaimsWithScope)
+
+	id, _ := strconv.Atoi(payload.Subject)
+
+	return uint(id), nil
 }
