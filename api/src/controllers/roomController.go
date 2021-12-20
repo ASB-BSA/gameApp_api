@@ -205,9 +205,10 @@ func CreateBattleTeam(id uint) (uint, error) {
 
 	for _, v := range myTeams.Teams {
 		chara := models.BattleCharacter{
-			BattleTeamsID: teams.ID,
-			Parameter:     v.Parameter,
-			CharacterId:   v.CharacterId,
+			BattleTeamsID:    teams.ID,
+			Parameter:        v.Parameter,
+			CharacterId:      v.CharacterId,
+			CharacteristicId: v.CharacteristicId,
 		}
 
 		if result := tx.Create(&chara); result.Error != nil {

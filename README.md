@@ -64,3 +64,12 @@ BASEURL=https://domain/api/v1
 ### 対戦の流れ
 
 1. opponentTeams, userTeams のTeamsから`Agility`の高い順に並び替え
+2. `Agility`の早い順から`Characteristic`の`timing: start`の処理をする
+3. `Agility`の早い順から戦闘処理をおこなう
+  1. 攻撃する相手をランダムに選ぶ
+  2. `Characteristic`の`timing: attack`の処理をする
+  3. 回避率の計算をする ※1
+  4. 攻撃が当たれば処理する ※2
+  5. 体力計算処理をする
+  6. 残り体力が`<= 0`で無ければ`Characteristic`の`timing: damage`の処理をする
+4. 

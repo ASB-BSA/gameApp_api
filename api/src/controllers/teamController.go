@@ -49,5 +49,10 @@ func PutTeamCharacter(c *fiber.Ctx) error {
 		return res.Error
 	}
 
-	return c.JSON(chara)
+	userid, _ := middlewares.GetUserId(c)
+
+	var user models.Users
+	database.DB.Where("id = ?", userid).Preload("Teams").Preload("Teams.Teams").Preload("Teams.Teams.Characteristics").First(&user)
+
+	return c.JSON(user)
 }

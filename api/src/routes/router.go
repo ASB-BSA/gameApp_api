@@ -16,8 +16,6 @@ func Setup(app *fiber.App) {
 	v1.Get("image/:id", controllers.Images)
 	v1.Post("user", controllers.PostUser)
 
-	v1.Get("test", controllers.CreateBattleLog)
-
 	admin := v1.Group("admin")
 	admin.Post("login", controllers.AdminLogin)
 
@@ -51,4 +49,5 @@ func Setup(app *fiber.App) {
 
 	battle := authen.Use(middlewares.IsBattle)
 	battle.Get("battle", controllers.GetBattle)
+	battle.Get("fight", controllers.CreateBattleLog)
 }

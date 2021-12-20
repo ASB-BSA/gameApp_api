@@ -52,8 +52,9 @@ func PostUser(c *fiber.Ctx) error {
 
 	for i := 0; i < 5; i++ {
 		chara := models.TeamsCharacter{
-			TeamsID:     teams.ID,
-			CharacterId: uint(i + 1),
+			TeamsID:          teams.ID,
+			CharacterId:      uint(i + 1),
+			CharacteristicId: 1,
 		}
 
 		if result := tx.Create(&chara); result.Error != nil {
@@ -99,7 +100,7 @@ func GetUser(c *fiber.Ctx) error {
 	}
 
 	var user models.Users
-	database.DB.Where("id = ?", id).Preload("Teams").Preload("Teams.Teams").First(&user)
+	database.DB.Where("id = ?", id).Preload("Teams").Preload("Teams.Teams").Preload("Teams.Teams.Characteristics").First(&user)
 
 	return c.JSON(user)
 }

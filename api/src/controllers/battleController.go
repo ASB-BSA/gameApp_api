@@ -4,6 +4,8 @@ import (
 	"boomin_game_api/src/database"
 	"boomin_game_api/src/middlewares"
 	"boomin_game_api/src/models"
+	"fmt"
+	"sort"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -67,7 +69,7 @@ func GetBattle(c *fiber.Ctx) error {
 	var battle models.Battle
 	battle.ID = id
 
-	if result := database.DB.Preload("User").Preload("UserTeams").Preload("UserTeams.Teams").Preload("OpponentUser").Preload("OpponentTeams").Preload("OpponentTeams.Teams").Where("is_active = ?", "1").First(&battle); result.Error != nil {
+	if result := database.DB.Preload("User").Preload("UserTeams").Preload("UserTeams.Teams").Preload("OpponentUser").Preload("OpponentTeams").Preload("OpponentTeams.Teams").First(&battle); result.Error != nil {
 		c.Status(400)
 		return c.JSON(fiber.Map{
 			"message": "対戦情報が見つかりませんでした",
@@ -82,12 +84,28 @@ func CreateBattleLog(c *fiber.Ctx) error {
 	var battle models.Battle
 	battle.ID = id
 
-	if result := database.DB.Preload("User").Preload("UserTeams").Preload("UserTeams.Teams").Preload("OpponentUser").Preload("OpponentTeams").Preload("OpponentTeams.Teams").Where("is_active = ?", "1").First(&battle); result.Error != nil {
+	if result := database.DB.Preload("User").Preload("UserTeams").Preload("UserTeams.Teams").Preload("UserTeams.Teams.Characteristics").Preload("OpponentUser").Preload("OpponentTeams").Preload("OpponentTeams.Teams").Preload("OpponentTeams.Teams.Characteristics").Where("is_active = ?", "1").First(&battle); result.Error != nil {
 		c.Status(400)
 		return c.JSON(fiber.Map{
 			"message": "対戦情報が見つかりませんでした",
 		})
 	}
 
-	return nil
+	// キャラクターのみを抽出
+	characters := battle.OpponentTeams.Teams
+	characters2 := battle.UserTeams.Teams
+	characters = append(characters, characters2...)
+
+	sort.Slice(characters, func(i, j int) bool {
+		return characters[i].Agility > characters[j].Agility
+	})
+
+	// スキル発動
+	for _, v := range characters {
+		if v.Characteristics.Timing == "start" {
+			fmt.Println(v.Characteristics)
+		}
+	}
+
+	return c.JSON(characters)
 }
