@@ -28,4 +28,11 @@ type BattleCharacter struct {
 	CharacteristicId uint           `json:"characteristicId" gorm:"default:1`
 	Characteristics  Characteristic `json:"characteristic" gorm:"foreignKey:CharacteristicId"`
 	Parameter
+	DefaultsAttack       int `json:"defaultAttack"`
+	DefaultsDefence      int `json:"defaultDefence"`
+	DefaultsAvoidance    int `json:"defaultAvoidance"`
+	DefaultsCriticalRate int `json:"defaultCriticalRate"`
+	DefaultsAgility      int `json:"defaultAgility"`
+	DefaultsHp           int `json:"defaultHp"`
+	DefaultsMp           int `json:"defaultMp"`
 }

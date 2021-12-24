@@ -15,5 +15,5 @@ type Parameter struct {
 	CriticalRate int `json:"criticalRate" gorm:"default:50"`
 	Agility      int `json:"agility" gorm:"default:50"`
 	Hp           int `json:"hp" gorm:"default:200"`
-	Mp           int `json:"mp" gorm:"default:0"`
+	Mp           int `json:"mp" gorm:"default:100"`
 }

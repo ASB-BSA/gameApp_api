@@ -205,10 +205,17 @@ func CreateBattleTeam(id uint) (uint, error) {
 
 	for _, v := range myTeams.Teams {
 		chara := models.BattleCharacter{
-			BattleTeamsID:    teams.ID,
-			Parameter:        v.Parameter,
-			CharacterId:      v.CharacterId,
-			CharacteristicId: v.CharacteristicId,
+			BattleTeamsID:        teams.ID,
+			Parameter:            v.Parameter,
+			CharacterId:          v.CharacterId,
+			CharacteristicId:     v.CharacteristicId,
+			DefaultsAttack:       v.Parameter.Attack,
+			DefaultsDefence:      v.Parameter.Defence,
+			DefaultsAvoidance:    v.Parameter.Avoidance,
+			DefaultsCriticalRate: v.Parameter.CriticalRate,
+			DefaultsAgility:      v.Parameter.Agility,
+			DefaultsHp:           v.Parameter.Hp,
+			DefaultsMp:           0,
 		}
 
 		if result := tx.Create(&chara); result.Error != nil {
