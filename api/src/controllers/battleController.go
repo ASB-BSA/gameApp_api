@@ -8,6 +8,7 @@ import (
 	"math"
 	"math/rand"
 	"sort"
+	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -86,100 +87,139 @@ func CreateBattleLog(c *fiber.Ctx) error {
 	var battle models.Battle
 	battle.ID = id
 
-	if result := database.DB.Preload("User").Preload("UserTeams").Preload("UserTeams.Teams").Preload("UserTeams.Teams.Characteristics").Preload("OpponentUser").Preload("OpponentTeams").Preload("OpponentTeams.Teams").Preload("OpponentTeams.Teams.Characteristics").Where("is_active = ?", "1").First(&battle); result.Error != nil {
+	var battleLog []models.BattleLogs
+
+	if res := database.DB.Where("battle_id = ?", id).Find(&battleLog); res.Error == nil {
 		c.Status(400)
 		return c.JSON(fiber.Map{
-			"message": "対戦情報が見つかりませんでした",
+			"message": "対戦情報が存在しています。",
 		})
 	}
 
-	// キャラクターのみを抽出
-	var characters []models.BattleCharacter
-	var characters2 []models.BattleCharacter
-
-	// どちらか全滅しているか確認
-	for _, v := range battle.OpponentTeams.Teams {
-		if v.Hp > 0 {
-			characters = append(characters, v)
+	for {
+		if result := database.DB.Preload("User").Preload("UserTeams").Preload("UserTeams.Teams").Preload("UserTeams.Teams.Characteristics").Preload("OpponentUser").Preload("OpponentTeams").Preload("OpponentTeams.Teams").Preload("OpponentTeams.Teams.Characteristics").Where("is_active = ?", "1").First(&battle); result.Error != nil {
+			c.Status(400)
+			return c.JSON(fiber.Map{
+				"message": "対戦情報が見つかりませんでした",
+			})
 		}
-	}
-	for _, v := range battle.UserTeams.Teams {
-		if v.Hp > 0 {
-			characters = append(characters, v)
+
+		// キャラクターのみを抽出
+		var characters []models.BattleCharacter
+		var characters2 []models.BattleCharacter
+
+		// どちらか全滅しているか確認
+		for _, v := range battle.OpponentTeams.Teams {
+			if v.Hp > 0 {
+				characters = append(characters, v)
+			}
 		}
-	}
-
-	if len(characters) == 0 || len(characters2) == 0 {
-		fmt.Println("owari")
-	}
-
-	characters = append(characters, characters2...)
-
-	sort.Slice(characters, func(i, j int) bool {
-		return characters[i].Agility > characters[j].Agility
-	})
-
-	tx := database.DB.Begin()
-
-	// ターン開始時のスキル発動
-	// for _, v := range characters {
-	// 	if v.Characteristics.Timing == "start" {
-	// 		CharacteristicConditions(characters, v)
-	// 	}
-	// }
-
-	// 攻撃処理
-	for _, v := range characters {
-		var targets []models.BattleCharacter
-
-		for _, chara := range characters {
-			if chara.BattleTeamsID != v.BattleTeamsID {
-				targets = append(targets, chara)
+		for _, v := range battle.UserTeams.Teams {
+			if v.Hp > 0 {
+				characters2 = append(characters2, v)
 			}
 		}
 
-		rand.Seed(time.Now().UnixNano())
-		num := rand.Intn(len(targets))
-
-		// 攻撃されるターゲット
-		target := targets[num]
-
-		// ダメージ計算
-		damage, err := AttackProcess(target, v)
-
-		if err != nil {
-			println(err)
-			continue
+		if len(characters) == 0 || len(characters2) == 0 {
+			fmt.Println("owari")
+			break
 		}
 
-		log := models.BattleLogs{
-			BattleID:          battle.ID,
-			BattleCharacterID: target.ID,
-			AttackerID:        v.ID,
-			Parameter:         "hp",
-			LogType:           "attack",
-			NumericalValue:    damage,
+		characters = append(characters, characters2...)
+
+		sort.Slice(characters, func(i, j int) bool {
+			return characters[i].Agility > characters[j].Agility
+		})
+
+		// ターン開始時のスキル発動
+		// for _, v := range characters {
+		// 	if v.Characteristics.Timing == "start" {
+		// 		CharacteristicConditions(characters, v)
+		// 	}
+		// }
+
+		// 攻撃処理
+		for _, v := range characters {
+			tx := database.DB.Begin()
+			var targets []models.BattleCharacter
+
+			for _, chara := range characters {
+				if chara.BattleTeamsID != v.BattleTeamsID {
+					targets = append(targets, chara)
+				}
+			}
+
+			rand.Seed(time.Now().UnixNano())
+			num := rand.Intn(len(targets))
+
+			// 攻撃されるターゲット
+			target := targets[num]
+
+			// ダメージ計算
+			damage, err := AttackProcess(target, v)
+
+			// 攻撃が当たらなかったとき
+			if err != nil {
+				println(err)
+
+				log := models.BattleLogs{
+					BattleID:          battle.ID,
+					BattleCharacterID: target.ID,
+					AttackerID:        v.ID,
+					Parameter:         "hp",
+					LogType:           "attack",
+					NumericalValue:    0,
+				}
+
+				if res := tx.Create(&log); res.Error != nil {
+					tx.Rollback()
+					return res.Error
+				}
+
+				continue
+			}
+
+			log := models.BattleLogs{
+				BattleID:          battle.ID,
+				BattleCharacterID: target.ID,
+				AttackerID:        v.ID,
+				Parameter:         "hp",
+				LogType:           "attack",
+				NumericalValue:    damage,
+			}
+
+			target.Hp = target.Hp - damage
+
+			if res := tx.Updates(&target); res.Error != nil {
+				tx.Rollback()
+				return res.Error
+			}
+
+			if res := tx.Create(&log); res.Error != nil {
+				tx.Rollback()
+				return res.Error
+			}
+			tx.Commit()
 		}
-
-		target.Hp = target.Hp - damage
-
-		if res := tx.Updates(&target); res.Error != nil {
-			tx.Rollback()
-			return res.Error
-		}
-
-		if res := tx.Create(&log); res.Error != nil {
-			tx.Rollback()
-			return res.Error
-		}
-
-		fmt.Println("==========================")
-		fmt.Println(v.ID)
-		fmt.Println(target.ID)
-		fmt.Println(damage)
 	}
 
-	return c.JSON(characters)
+	if res := database.DB.Where("battle_id = ?", id).Find(&battleLog); res.Error != nil {
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": "エラーが発生しました。",
+		})
+	}
+
+	data := map[string]string{
+		"battleID": strconv.Itoa(int(battle.ID)),
+	}
+
+	database.PusherClient.Trigger("battle-log", strconv.Itoa(int(id)), data)
+
+	return c.JSON(fiber.Map{
+		"logs":       battleLog,
+		"battleData": battle,
+	})
 }
 
 func AttackProcess(target models.BattleCharacter, attacker models.BattleCharacter) (int, error) {
